@@ -81,7 +81,7 @@ public class DaoAnnotationProcessor extends AbstractProcessor{
                 String classSimpleName = beanClassSimpleName + "Dao";// 类名，bean+Dao
                 String classFullName = myPackage + "." + classSimpleName;// 得到文件名
                 logMessger.printMessage(Diagnostic.Kind.OTHER,"#######Create Table : " + dao.value());
-                logMessger.printMessage(Diagnostic.Kind.OTHER,"Dao Name :" + classFullName);
+                logMessger.printMessage(Diagnostic.Kind.OTHER,"### Dao Name :" + classFullName);
                 List<ColumnProperty> daoProperties = daoProperties(daoTypeElement);// 所有@DaoProperty注解的属性
                 // 创建文件
                 JavaFileObject source = processingEnv.getFiler().createSourceFile(classFullName);
@@ -92,6 +92,7 @@ public class DaoAnnotationProcessor extends AbstractProcessor{
                 writer.write("import android.database.sqlite.SQLiteStatement;\n");
                 writer.write("import de.greenrobot.dao.AbstractDao;\n");
                 writer.write("import de.greenrobot.dao.Property;\n");
+                writer.write("import android.util.Log;\n");
                 String daoSessionFileName = processingEnv.getOptions().get(OPTION_DAO_SESSION);
                 writer.write(String.format(Locale.getDefault(),"import %s;\n",daoSessionFileName));
                 writer.write("import de.greenrobot.dao.internal.DaoConfig;\n\n");
@@ -122,6 +123,7 @@ public class DaoAnnotationProcessor extends AbstractProcessor{
                 writeReadEntity(writer,beanClassSimpleName,daoProperties);
                 // updateKeyAfterInsert方法生成
                 writer.write(String.format(Locale.getDefault(),"    protected Long updateKeyAfterInsert(%s entity, long rowId) {\n",beanClassSimpleName));
+                writer.write(String.format(Locale.getDefault(),"        Log.v(\"Dao\",\"\"+entity + \",rowId = \" + rowId);\n"));
                 writer.write(String.format(Locale.getDefault(),"        entity.setId(rowId);\n"));
                 writer.write(String.format(Locale.getDefault(),"        return rowId;\n"));
                 writer.write(String.format(Locale.getDefault(),"    }\n\n"));
@@ -360,33 +362,34 @@ public class DaoAnnotationProcessor extends AbstractProcessor{
                     String cursorGetType = "";
                     // 在annotation中，被注解的属性只能是基本数据类型，Class,String
                     String fullTypeClass = e.asType().toString();
-                    if(fullTypeClass.equals("long")){
-                        columnClazz = Long.class;
-                        stmtBindType = columnClazz.getSimpleName();
-                        cursorGetType = stmtBindType;
-                    }else if(fullTypeClass.equals("int")){
-                        columnClazz = Integer.class;
-                        stmtBindType = Long.class.getSimpleName();
-                        cursorGetType = "Int";
-                    }else if(fullTypeClass.equals("boolean")){
-                        columnClazz = Boolean.class;
-                        stmtBindType = Long.class.getSimpleName();
-                        cursorGetType = "Short";
-                    }else { //if(fullTypeClass.equals("java.lang.String")){
-                        if(fullTypeClass.equals("java.lang.String")){
-                            columnClazz = String.class;
-                            stmtBindType = String.class.getSimpleName();
-                            cursorGetType = stmtBindType;
-                        }else{
-                            logMessger.printMessage(Diagnostic.Kind.ERROR,"@DaoProperty Field Must be Base Type or Class or String",e);
-                        }
-                    }
+                    logMessger.printMessage(Diagnostic.Kind.OTHER,"fullTypeClass = " + fullTypeClass);
+//                    if(fullTypeClass.equals("Long")){
+//                        columnClazz = Long.class;
+//                        stmtBindType = columnClazz.getSimpleName();
+//                        cursorGetType = stmtBindType;
+//                    }else if(fullTypeClass.equals("Integer")){
+//                        columnClazz = Integer.class;
+//                        stmtBindType = Long.class.getSimpleName();
+//                        cursorGetType = "Int";
+//                    }else if(fullTypeClass.equals("Boolean")){
+//                        columnClazz = Boolean.class;
+//                        stmtBindType = Long.class.getSimpleName();
+//                        cursorGetType = "Short";
+//                    }else { //if(fullTypeClass.equals("java.lang.String")){
+//                        if(fullTypeClass.equals("java.lang.String")){
+//                            columnClazz = String.class;
+//                            stmtBindType = String.class.getSimpleName();
+//                            cursorGetType = stmtBindType;
+//                        }else{
+//                            logMessger.printMessage(Diagnostic.Kind.ERROR,"@DaoProperty Field Must be Base Type or Class or String",e);
+//                        }
+//                    }
                     String fieldName = e.getSimpleName().toString();
                     String columnName = fieldName.equals("id")?"_id":fieldName.toUpperCase();
 
                     ColumnProperty property = new ColumnProperty(daoProperty.ordinal(),columnClazz,fieldName,daoProperty.isPrimaryKey(),columnName,stmtBindType,cursorGetType);
                     properties.add(property);
-                    logMessger.printMessage(Diagnostic.Kind.OTHER,property.toString());
+//                    logMessger.printMessage(Diagnostic.Kind.OTHER,property.toString());
                 }else{
                     logMessger.printMessage(Diagnostic.Kind.ERROR,"@DaoProperty is only valid for field",e);
                     break;

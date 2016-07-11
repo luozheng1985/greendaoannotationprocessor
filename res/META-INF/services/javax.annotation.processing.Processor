@@ -1,2 +1,2 @@
-com.roobo.greendaoannotationprocessor.DataBaseAnnotationProcessor
 com.roobo.greendaoannotationprocessor.DaoAnnotationProcessor
+com.roobo.greendaoannotationprocessor.DataBaseAnnotationProcessor
