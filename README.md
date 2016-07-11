@@ -1,6 +1,6 @@
 ## greendaoannotationprocessor
 ####1、该注解的主要目的
-    ORM数据库目前[greendao][1]各种性能都比较不错，
+    ORM数据库目前[greendao][http://greenrobot.org/greendao/]各种性能都比较不错，
 但是有个比较郁闷的地方是创建Bean和生成Dao是在一个java工程中，
 这个对于项目的管理、合作开发以及维护方面会带来一些问题，因而这里采用注解的方式来解决这个这个问题，
 使得Dao的创建以及注入到DaoSession中都在同一个项目中，便于升级和维护，另外，因为采用的是Java Annotation Processing，
@@ -82,7 +82,7 @@ public class User {
     }
 }
 ```
-[1]:http://greenrobot.org/greendao/
+
 
 
 
