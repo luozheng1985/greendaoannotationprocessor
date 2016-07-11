@@ -17,7 +17,7 @@ import javax.tools.JavaFileObject;
 /**
  * Created by LuoZheng on 2016/7/7.
  */
-@SupportedAnnotationTypes("DataBase")
+@SupportedAnnotationTypes("com.roobo.greendaoannotationprocessor.DataBase")
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 // 这个是用来配置生成的class全名（包名+类名）,数据库名，数据库版本
 @SupportedOptions(value = {"appSQLiteOpenHelper","appDatabaseName","appDatabaseVersion"})

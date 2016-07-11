@@ -28,7 +28,7 @@ import javax.tools.JavaFileObject;
  * 2、Bean里面必须含有一个符合要求的构造函数，要求是啥？呵呵！
  * 3、在对应的Bean同级目录下会生成一个BeanDao，并注入到DaoSession中
  */
-@SupportedAnnotationTypes(value = {"Dao","DaoProperty"})
+@SupportedAnnotationTypes(value = {"com.roobo.greendaoannotationprocessor.Dao","com.roobo.greendaoannotationprocessor.DaoProperty"})
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 @SupportedOptions(value = {"appDaoSession","appDaoMaster","appDatabaseVersion"})
 public class DaoAnnotationProcessor extends AbstractProcessor{
@@ -363,27 +363,27 @@ public class DaoAnnotationProcessor extends AbstractProcessor{
                     // 在annotation中，被注解的属性只能是基本数据类型，Class,String
                     String fullTypeClass = e.asType().toString();
                     logMessger.printMessage(Diagnostic.Kind.OTHER,"fullTypeClass = " + fullTypeClass);
-//                    if(fullTypeClass.equals("Long")){
-//                        columnClazz = Long.class;
-//                        stmtBindType = columnClazz.getSimpleName();
-//                        cursorGetType = stmtBindType;
-//                    }else if(fullTypeClass.equals("Integer")){
-//                        columnClazz = Integer.class;
-//                        stmtBindType = Long.class.getSimpleName();
-//                        cursorGetType = "Int";
-//                    }else if(fullTypeClass.equals("Boolean")){
-//                        columnClazz = Boolean.class;
-//                        stmtBindType = Long.class.getSimpleName();
-//                        cursorGetType = "Short";
-//                    }else { //if(fullTypeClass.equals("java.lang.String")){
-//                        if(fullTypeClass.equals("java.lang.String")){
-//                            columnClazz = String.class;
-//                            stmtBindType = String.class.getSimpleName();
-//                            cursorGetType = stmtBindType;
-//                        }else{
-//                            logMessger.printMessage(Diagnostic.Kind.ERROR,"@DaoProperty Field Must be Base Type or Class or String",e);
-//                        }
-//                    }
+                    if(fullTypeClass.equals("java.lang.Long") || fullTypeClass.equals("long")){
+                        columnClazz = Long.class;
+                        stmtBindType = columnClazz.getSimpleName();
+                        cursorGetType = stmtBindType;
+                    }else if(fullTypeClass.equals("java.lang.Integer") || fullTypeClass.equals("int")){
+                        columnClazz = Integer.class;
+                        stmtBindType = Long.class.getSimpleName();
+                        cursorGetType = "Int";
+                    }else if(fullTypeClass.equals("java.lang.Boolean") || fullTypeClass.equals("boolean")){
+                        columnClazz = Boolean.class;
+                        stmtBindType = Long.class.getSimpleName();
+                        cursorGetType = "Short";
+                    }else { //if(fullTypeClass.equals("java.lang.String")){
+                        if(fullTypeClass.equals("java.lang.String")){
+                            columnClazz = String.class;
+                            stmtBindType = String.class.getSimpleName();
+                            cursorGetType = stmtBindType;
+                        }else{
+                            logMessger.printMessage(Diagnostic.Kind.ERROR,"@DaoProperty Field Must be Base Type or Class or String",e);
+                        }
+                    }
                     String fieldName = e.getSimpleName().toString();
                     String columnName = fieldName.equals("id")?"_id":fieldName.toUpperCase();
 
