@@ -14,14 +14,23 @@
 2)Bean里面必须含有一个符合要求的构造函数;
 
 
-####3、如何使用
+####3、如何使用,详细使用参考这里：http://www.jianshu.com/p/0646b338ee0a
 @Dao:用来指定表名；
 @DaoProperty:用来指定表中的字段；
 ```java
+package com.roobo.domgy.database;
+
+
+import com.roobo.greendaoannotationprocessor.Dao;
+import com.roobo.greendaoannotationprocessor.DaoProperty;
+
+/**
+ * Created by LuoZheng on 2016/7/8.
+ */
 @Dao("TB_USER")
 public class User {
     @DaoProperty(ordinal = 0,isPrimaryKey = true)
-    private long id;
+    private Long id;
 
     @DaoProperty(ordinal = 1)
     private String nickName;
@@ -34,26 +43,28 @@ public class User {
     @DaoProperty(ordinal = 3)
     private boolean isMan;
 
-    public User(long id, String nickName,int age,boolean isMan) {
+    public User(Long id) {
+        this.id = id;
+    }
+
+    public User(Long id, String nickName, Integer age, Boolean isMan) {
         this.id = id;
         this.nickName = nickName;
         this.age = age;
         this.isMan = isMan;
     }
 
-    public boolean getIsMan() {
-        return isMan;
+    public User(String nickName,int age,boolean isMan) {
+        this.nickName = nickName;
+        this.age = age;
+        this.isMan = isMan;
     }
 
-    public void setIsMan(boolean man) {
-        isMan = man;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -80,7 +91,27 @@ public class User {
     public void setSex(String sex) {
         this.sex = sex;
     }
+
+    public boolean getIsMan() {// 注意这里的get方法
+        return isMan;
+    }
+
+    public void setIsMan(boolean man) {// 注意这里的set方法
+        isMan = man;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", nickName='" + nickName + '\'' +
+                ", age=" + age +
+                ", sex='" + sex + '\'' +
+                ", isMan=" + isMan +
+                '}';
+    }
 }
+
 ```
 
 
